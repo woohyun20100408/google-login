@@ -22,4 +22,5 @@ def load():
     return jsonify(saved_data)
 
 if __name__ == '__main__':
-    app.run()
+    # 여기서 호스트와 포트를 0.0.0.0으로 설정
+    app.run(host="0.0.0.0", port=5000)
